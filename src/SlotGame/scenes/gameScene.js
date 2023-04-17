@@ -3,7 +3,7 @@ import Button from '../objects/button.js'
 import SlotMachine from '../objects/slotMachine.js'
 
 //Очень не хотел выносить переменные в глобальную видимость, но почему-то не могу обратиться к ним из
-//методов класса, когда объявляю их в конструкторе 
+//методов класса, когда объявляю их в конструкторе или перед ним
 let slotMachine
 
 export default class GameScene extends Phaser.Scene{
