@@ -15,4 +15,5 @@ export default {
         mode: Phaser.Scale.NONE,
     },
     scene: [preloadScene, gameScene],
+    
 }
