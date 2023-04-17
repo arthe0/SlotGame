@@ -5,8 +5,10 @@ let slots = []
 export default class SlotMachine extends Phaser.GameObjects.Container{
     
     isSpinning = false
+    isStopRequested = false
+    isAbleToStop = false
+
     slotsNum = 5
-    slotCounter = 0
 
     constructor(scene, x, y){
         super(scene, x, y)
@@ -21,6 +23,7 @@ export default class SlotMachine extends Phaser.GameObjects.Container{
     startMachine(){
         if(this.isSpinning) return
 
+        this.isAbleToStop = false
         this.isSpinning = true
         this.slotCounter = 0
 
@@ -32,12 +35,19 @@ export default class SlotMachine extends Phaser.GameObjects.Container{
                 this.slotCounter++
             },
             callbackScope: this,
-            repeat: this.slotsNum-1
+            repeat: this.slotsNum-1,            
+        })
+
+        this.scene.time.addEvent({
+            delay: 100 * this.slotsNum,
+            callback: ()=>{this.isAbleToStop = true},
+            callbackScope: this
         })
     }
 
     stopMachine(){
-        if(!this.isSpinning) return
+        if(!this.isSpinning || this.isStopRequested || !this.isAbleToStop) return
+        this.isStopRequested = true
 
         this.slotCounter = 0
         
@@ -54,5 +64,6 @@ export default class SlotMachine extends Phaser.GameObjects.Container{
 
     onLastContainerStoped(context){
         context.isSpinning = false
+        context.isStopRequested = false
     }
 }

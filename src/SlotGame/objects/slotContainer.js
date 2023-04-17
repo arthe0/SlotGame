@@ -97,12 +97,12 @@ export default class SlotContainer extends Phaser.GameObjects.Container{
                 this.moveSlots(false)
             },
             onComplete: ()=>{
-                this.isSpinning = false;
-                this.isStopRequested = false;
-
                 if(this.endCallback){
                     this.endCallback(this.callbackContext)
-                }         
+                }     
+                
+                this.isSpinning = false;
+                this.isStopRequested = false;    
             }
         })
     }
