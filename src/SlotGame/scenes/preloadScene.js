@@ -1,4 +1,5 @@
 import GameConfig from '../../config.js'
+import gameParams from '../gameParams.js';
 
 export default class preloadScene extends Phaser.Scene {
     constructor() {
@@ -30,7 +31,7 @@ export default class preloadScene extends Phaser.Scene {
         });
 
         //Loading resources
-        for(let i = 0; i < 11; i++){
+        for(let i = 0; i < gameParams.symbolsNum; i++){
             this.load.image('symbol'+ i, 'assets/symbols/'+ (i+1) + '.png')
             this.load.image('symbolBlurred'+ i, 'assets/symbols_blur/'+ (i+1) + '.png')
         }

@@ -16,7 +16,7 @@ export default class SlotContainer extends Phaser.GameObjects.Container{
 
         for(let i = 0; i < 5; i++)
         {
-            this.rnd = this.randomBetween(0,10)
+            this.rnd = this.randomBetween(0, GameParams.symbolsNum-1)
             this.symbols[i] = new SlotSymbol(
                 scene, {
                 x: 0, 
@@ -117,7 +117,7 @@ export default class SlotContainer extends Phaser.GameObjects.Container{
         symbol.y = this.first.y - GameParams.symbolHeight
         this.moveTo(symbol, 0)
 
-        const rndNum = this.randomBetween(0,10)
+        const rndNum = this.randomBetween(0, GameParams.symbolsNum-1)
 
         if(isBlurred){
             symbol.setTexture('symbolBlurred' + rndNum)
