@@ -2,21 +2,23 @@ import GameParams from '../gameParams'
 import SlotSymbol from './symbol.js'
 
 export default class SlotContainer extends Phaser.GameObjects.Container {
-    isStopRequested = false
-    isSpinning = false
-
     constructor(scene, x, y, endCallback, startSpinningCallback, callbackContext) {
-        super(scene, x, y)
-        scene.add.existing(this)
+        super(scene, x, y),
+            scene.add.existing(this),
+            (this.symbols = []),
+            (this.endCallback = endCallback),
+            (this.startSpinningCallback = startSpinningCallback),
+            (this.callbackContext = callbackContext),
+            (this.isStopRequested = false),
+            (this.isSpinning = false)
 
-        this.symbols = []
-        this.endCallback = endCallback
-        this.startSpinningCallback = startSpinningCallback
-        this.callbackContext = callbackContext
+        this.init()
+    }
 
+    init() {
         for (let i = 0; i < 5; i++) {
-            this.rnd = this.randomBetween(0, GameParams.symbolsNum - 1)
-            this.symbols[i] = new SlotSymbol(scene, {
+            this.rnd = Phaser.Math.Between(0, GameParams.symbolsNum - 1)
+            this.symbols[i] = new SlotSymbol(this.scene, {
                 x: 0,
                 y: i * GameParams.symbolHeight,
                 key: 'symbol' + this.rnd,
@@ -38,10 +40,10 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
             ease: Phaser.Math.Easing.Quadratic.In,
             repeat: 0,
             onRepeat: () => {
-                this.moveSlots(false)
+                this.moveSymbols(false)
             },
             onComplete: () => {
-                this.moveSlots(false)
+                this.moveSymbols(false)
                 if (this.startSpinningCallback) {
                     this.startSpinningCallback(this.callbackContext)
                 }
@@ -65,7 +67,7 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
             },
             repeat: GameParams.spinRepeats,
             onRepeat: () => {
-                this.moveSlots(true)
+                this.moveSymbols(true)
                 this.spinTween.updateTo('y', this.y + GameParams.symbolHeight, true)
                 if (this.isStopRequested) {
                     this.spinTween.complete()
@@ -73,7 +75,7 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
             },
             onComplete: () => {
                 if (!this.isStopRequested) {
-                    this.moveSlots(true)
+                    this.moveSymbols(true)
                     this.spinTween.updateTo('y', this.y + GameParams.symbolHeight, true)
                 }
 
@@ -83,7 +85,7 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
     }
 
     endSpinning() {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             this.getAt(i).setTexture('symbol' + this.getAt(i).symbolValue)
         }
 
@@ -95,7 +97,7 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
             repeat: 0,
             yoyo: true,
             onRepeat: () => {
-                this.moveSlots(false)
+                this.moveSymbols(false)
             },
             onComplete: () => {
                 if (this.endCallback) {
@@ -112,12 +114,12 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
         this.isStopRequested = true
     }
 
-    moveSlots(isBlurred) {
+    moveSymbols(isBlurred) {
         let symbol = this.last
         symbol.y = this.first.y - GameParams.symbolHeight
         this.moveTo(symbol, 0)
 
-        const rndNum = this.randomBetween(0, GameParams.symbolsNum - 1)
+        const rndNum = Phaser.Math.Between(0, GameParams.symbolsNum - 1)
 
         if (isBlurred) {
             symbol.setTexture('symbolBlurred' + rndNum)
@@ -125,9 +127,5 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
             symbol.setTexture('symbol' + rndNum)
         }
         symbol.symbolValue = rndNum
-    }
-
-    randomBetween(min, max) {
-        return Phaser.Math.Between(min, max)
     }
 }

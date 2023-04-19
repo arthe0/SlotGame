@@ -1,21 +1,18 @@
 import SlotContainer from '../objects/slotContainer.js'
 
-let slots = []
-
 export default class SlotMachine extends Phaser.GameObjects.Container {
-    isSpinning = false
-    isStopRequested = false
-    isAbleToStop = false
-
-    slotsNum = 5
-
     constructor(scene, x, y) {
-        super(scene, x, y)
+        super(scene, x, y),
+            (this.isSpinning = false),
+            (this.isStopRequested = false),
+            (this.isAbleToStop = false),
+            (this.slotsNum = 5),
+            (this.slots = [])
 
         for (let i = 0; i < this.slotsNum - 1; i++) {
-            slots.push(new SlotContainer(scene, x + 147 * i, y))
+            this.slots.push(new SlotContainer(scene, x + 147 * i, y))
         }
-        slots.push(
+        this.slots.push(
             new SlotContainer(
                 scene,
                 x + 147 * (this.slotsNum - 1),
@@ -37,8 +34,8 @@ export default class SlotMachine extends Phaser.GameObjects.Container {
         this.scene.time.addEvent({
             delay: 100,
             callback: () => {
-                if (!slots[this.slotCounter]) return
-                slots[this.slotCounter].startSpinning()
+                if (!this.slots[this.slotCounter]) return
+                this.slots[this.slotCounter].startSpinning()
                 this.slotCounter++
             },
             callbackScope: this,
@@ -55,7 +52,7 @@ export default class SlotMachine extends Phaser.GameObjects.Container {
         this.scene.time.addEvent({
             delay: 100,
             callback: () => {
-                slots[this.slotCounter].stopSpinning()
+                this.slots[this.slotCounter].stopSpinning()
                 this.slotCounter++
             },
             callbackScope: this,
