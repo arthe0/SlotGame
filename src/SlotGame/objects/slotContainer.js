@@ -12,10 +12,6 @@ export default class SlotContainer extends Phaser.GameObjects.Container {
             (this.isStopRequested = false),
             (this.isSpinning = false)
 
-        this.init()
-    }
-
-    init() {
         for (let i = 0; i < 5; i++) {
             this.rnd = Phaser.Math.Between(0, GameParams.symbolsNum - 1)
             this.symbols[i] = new SlotSymbol(this.scene, {
